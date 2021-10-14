@@ -60,7 +60,7 @@ journals_n <- scopus |>
   arrange(desc(n))
 ```
 
-```{r, fig.cap="Source: https://jcr.clarivate.com/jcr/search-results"}
+```{r, fig.cap="Source: https://jcr.clarivate.com/jcr/search-results<br>'Good position`: 1, 2, 3, -1, -2"}
 # journals_n$journal |> paste(collapse = ",\n") |> cat()
 journal_q <- tribble(
   ~ journal,                                                             ~ quartile, ~where,
