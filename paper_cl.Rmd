@@ -1,0 +1,122 @@
+---
+title: "Elenco pubblicazioni"
+author: "Corrado Lanera"
+date: "10/14/2021"
+output: html_document
+params:
+  me: "lanera"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  comment = "",
+  message = FALSE,
+  warning = FALSE
+)
+
+library(here)
+library(tidyverse)
+library(janitor)
+library(DT)
+```
+
+
+## Scopus
+
+```{r, fig.cap="Source: https://www.scopus.com/authid/detail.uri?authorId=57194571690"}
+scopus <- here("data-raw/scopus.csv") |> 
+  read_csv() |> 
+  clean_names() |> 
+  rename(
+    journal = source_title,
+    n_cit = cited_by
+  ) |> 
+  mutate(
+    open = !is.na(open_access),
+    authors = str_split(authors, pattern = ", ") |> 
+      map(str_to_lower),
+    first = map_chr(authors, 1) |>
+      map_chr(str_to_title) |> 
+      as_factor(),
+    last = map_chr(authors, ~.x[[length(.x)]]) |>
+      str_to_title() |> 
+      as_factor(),
+    n_authors = map_int(authors, length),
+    my_pos = map_int(authors, str_which, params[["me"]]),
+    good_pos = (my_pos %in% 1:3) | (n_authors - my_pos < 2),
+    n_cit = replace_na(n_cit, 0L),
+    journal = str_to_title(journal)
+  ) |> 
+  select(year, journal, title, first, last, my_pos, good_pos, n_authors, n_cit, open, doi)
+```
+
+
+### Journals
+
+```{r}
+journals_n <- scopus |> 
+  count(journal) |> 
+  arrange(desc(n))
+```
+
+```{r, fig.cap="Source: https://jcr.clarivate.com/jcr/search-results"}
+# journals_n$journal |> paste(collapse = ",\n") |> cat()
+journal_q <- tribble(
+  ~ journal,                                                             ~ quartile, ~where,
+    "International Journal Of Environmental Research And Public Health",   1,         "SSCI",
+    "Bmc Public Health",                                                   2,         "SCIE",
+    "International Journal Of Cardiology",                                 2,         "SCIE",
+    "Journal Of Clinical Medicine",                                        1,         "SCIE",
+    "Aging Clinical And Experimental Research",                            3,         "SCIE",
+    "Amia ... Annual Symposium Proceedings. Amia Symposium",              NA,             NA,
+    "Applied Sciences (Switzerland)",                                     NA,             NA,
+    "Bmj Open",                                                            2,         "SCIE",
+    "Critical Care",                                                       1,         "SCIE",
+    "Diagnostics",                                                         2,         "SCIE",
+    "Epidemiology Biostatistics And Public Health",                       NA,             NA,
+    "Expert Review Of Medical Devices",                                    2,         "SCIE",
+    "Health And Social Care In The Community",                             1,         "SSCI",
+    "Ijc Heart And Vasculature",                                          NA,             NA,
+    "International Journal Of Food Sciences And Nutrition",                2,         "SCIE",
+    "Jacc: Clinical Electrophysiology",                                    1,         "SCIE",
+    "Jmir Medical Informatics",                                            3,         "SCIE",
+    "Journal Of Cardiovascular Medicine",                                  3,         "SCIE",
+    "Journal Of Clinical Epidemiology",                                    1,         "SCIE",
+    "Journal Of Epidemiology And Community Health",                        1,         "SSCI",
+    "Journal Of Multidisciplinary Healthcare",                             3,         "SCIE",
+    "Journal Of Personalized Medicine",                                    1,         "SCIE",
+    "Journal Of The American Heart Association",                           1,         "SCIE",
+    "Journal Of The American Society Of Echocardiography",                 2,         "SCIE",
+    "Medical Care Research And Review",                                    1,         "SSCI",
+    "Nutrients",                                                           1,         "SCIE",
+    "Scientific Reports",                                                  1,         "SCIE",
+    "Systematic Reviews",                                                  2,         "SCIE",
+    "The Lancet Planetary Health",                                         1,         "SCIE"
+)
+
+journal_q |> 
+  arrange(quartile) |> 
+  datatable(rownames = FALSE)
+```
+
+
+```{r}
+scopus |> 
+  left_join(journal_q) |>
+  relocate(quartile, .after = journal) |>
+  arrange(desc(good_pos), quartile) |> 
+  datatable(filter = "top",
+            rownames = FALSE,
+            options = list(pageLength = 15, autoWidth = TRUE))
+```
+
+
+```{r}
+journals_n |> 
+  left_join(journal_q) |> 
+  relocate(quartile, .after = journal) |>
+  arrange(quartile) |> 
+  datatable(rownames = FALSE)
+```
+
