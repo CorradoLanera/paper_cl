@@ -7,6 +7,14 @@ params:
   me: "lanera"
 ---
 
+<style>
+.main-container {
+    max-width: 940px;
+    margin-left: 0;
+    margin-right: auto;
+}
+</style>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = FALSE,
@@ -24,7 +32,7 @@ library(DT)
 
 ## Scopus
 
-```{r, fig.cap="Source: https://www.scopus.com/authid/detail.uri?authorId=57194571690"}
+```{r, include = FALSE}
 scopus <- here("data-raw/scopus.csv") |> 
   read_csv() |> 
   clean_names() |> 
@@ -54,13 +62,13 @@ scopus <- here("data-raw/scopus.csv") |>
 
 ### Journals
 
-```{r}
+```{r, include = FALSE}
 journals_n <- scopus |> 
   count(journal) |> 
   arrange(desc(n))
 ```
 
-```{r, fig.cap="Source: https://jcr.clarivate.com/jcr/search-results<br>'Good position`: 1, 2, 3, -1, -2"}
+```{r, include = FALSE, fig.cap="Source: https://jcr.clarivate.com/jcr/search-results<br>'Good position`: 1, 2, 3, -1, -2"}
 # journals_n$journal |> paste(collapse = ",\n") |> cat()
 journal_q <- tribble(
   ~ journal,                                                             ~ quartile, ~where,
@@ -101,7 +109,7 @@ journal_q |>
 ```
 
 
-```{r}
+```{r, fig.cap="Source: https://www.scopus.com/authid/detail.uri?authorId=57194571690"}
 scopus |> 
   left_join(journal_q) |>
   relocate(quartile, .after = journal) |>
@@ -112,7 +120,7 @@ scopus |>
 ```
 
 
-```{r}
+```{r, fig.cap="Source: https://jcr.clarivate.com/jcr/search-results"}
 journals_n |> 
   left_join(journal_q) |> 
   relocate(quartile, .after = journal) |>
