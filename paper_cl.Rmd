@@ -71,36 +71,36 @@ journals_n <- scopus |>
 ```{r, include = FALSE, fig.cap="Source: https://jcr.clarivate.com/jcr/search-results<br>'Good position`: 1, 2, 3, -1, -2"}
 # journals_n$journal |> paste(collapse = ",\n") |> cat()
 journal_q <- tribble(
-  ~ journal,                                                             ~ quartile, ~where,
-    "International Journal Of Environmental Research And Public Health",   1,         "SSCI",
-    "Bmc Public Health",                                                   2,         "SCIE",
-    "International Journal Of Cardiology",                                 2,         "SCIE",
-    "Journal Of Clinical Medicine",                                        1,         "SCIE",
-    "Aging Clinical And Experimental Research",                            3,         "SCIE",
-    "Amia ... Annual Symposium Proceedings. Amia Symposium",              NA,             NA,
-    "Applied Sciences (Switzerland)",                                     NA,             NA,
-    "Bmj Open",                                                            2,         "SCIE",
-    "Critical Care",                                                       1,         "SCIE",
-    "Diagnostics",                                                         2,         "SCIE",
-    "Epidemiology Biostatistics And Public Health",                       NA,             NA,
-    "Expert Review Of Medical Devices",                                    2,         "SCIE",
-    "Health And Social Care In The Community",                             1,         "SSCI",
-    "Ijc Heart And Vasculature",                                          NA,             NA,
-    "International Journal Of Food Sciences And Nutrition",                2,         "SCIE",
-    "Jacc: Clinical Electrophysiology",                                    1,         "SCIE",
-    "Jmir Medical Informatics",                                            3,         "SCIE",
-    "Journal Of Cardiovascular Medicine",                                  3,         "SCIE",
-    "Journal Of Clinical Epidemiology",                                    1,         "SCIE",
-    "Journal Of Epidemiology And Community Health",                        1,         "SSCI",
-    "Journal Of Multidisciplinary Healthcare",                             3,         "SCIE",
-    "Journal Of Personalized Medicine",                                    1,         "SCIE",
-    "Journal Of The American Heart Association",                           1,         "SCIE",
-    "Journal Of The American Society Of Echocardiography",                 2,         "SCIE",
-    "Medical Care Research And Review",                                    1,         "SSCI",
-    "Nutrients",                                                           1,         "SCIE",
-    "Scientific Reports",                                                  1,         "SCIE",
-    "Systematic Reviews",                                                  2,         "SCIE",
-    "The Lancet Planetary Health",                                         1,         "SCIE"
+  ~ journal,                                                             ~ quartile, ~where, ~impact_factor,
+    "International Journal Of Environmental Research And Public Health",   1,         "SSCI", 3.390,
+    "Bmc Public Health",                                                   2,         "SCIE", 3.295,
+    "International Journal Of Cardiology",                                 2,         "SCIE", 4.164,
+    "Journal Of Clinical Medicine",                                        1,         "SCIE", 4.241,
+    "Aging Clinical And Experimental Research",                            3,         "SCIE", 3.636,
+    "Amia ... Annual Symposium Proceedings. Amia Symposium",              NA,             NA,    NA,
+    "Applied Sciences (Switzerland)",                                      2,         "SCIE", 2.679,
+    "Bmj Open",                                                            2,         "SCIE", 2.692,
+    "Critical Care",                                                       1,         "SCIE", 9.097,
+    "Diagnostics",                                                         2,         "SCIE", 3.706,
+    "Epidemiology Biostatistics And Public Health",                       NA,             NA,    NA,
+    "Expert Review Of Medical Devices",                                    2,         "SCIE", 3.166,
+    "Health And Social Care In The Community",                             1,         "SSCI", 2.821,
+    "Ijc Heart And Vasculature",                                          NA,             NA,    NA,
+    "International Journal Of Food Sciences And Nutrition",                2,         "SCIE", 3.833,
+    "Jacc: Clinical Electrophysiology",                                    1,         "SCIE", 6.375,
+    "Jmir Medical Informatics",                                            3,         "SCIE", 2.955,
+    "Journal Of Cardiovascular Medicine",                                  3,         "SCIE", 2.160,
+    "Journal Of Clinical Epidemiology",                                    1,         "SCIE", 6.437,
+    "Journal Of Epidemiology And Community Health",                        1,         "SSCI", 3.710,
+    "Journal Of Multidisciplinary Healthcare",                             3,         "SCIE", 2.404,
+    "Journal Of Personalized Medicine",                                    1,         "SCIE", 4.945,
+    "Journal Of The American Heart Association",                           1,         "SCIE", 5.501,
+    "Journal Of The American Society Of Echocardiography",                 2,         "SCIE", 5.251,
+    "Medical Care Research And Review",                                    1,         "SSCI", 3.929,
+    "Nutrients",                                                           1,         "SCIE", 5.717,
+    "Scientific Reports",                                                  1,         "SCIE", 4.379,
+    "Systematic Reviews",                                                  2,         "SCIE", 2.522,
+    "The Lancet Planetary Health",                                         1,         "SCIE", 19.173
 )
 
 journal_q |> 
@@ -110,15 +110,18 @@ journal_q |>
 
 
 ```{r, fig.cap="Source: https://www.scopus.com/authid/detail.uri?authorId=57194571690"}
-scopus |> 
+scopus_tbl <- scopus |> 
   left_join(journal_q) |>
   relocate(quartile, .after = journal) |>
-  arrange(desc(good_pos), quartile) |> 
+  arrange(desc(good_pos), quartile)
+
+scopus_tbl |> 
   datatable(filter = "top",
             rownames = FALSE,
             options = list(pageLength = 15, autoWidth = TRUE))
 ```
 
+Overall IF: `r sum(scopus_tbl[['impact_factor']], na.rm = TRUE)`.
 
 ```{r, fig.cap="Source: https://jcr.clarivate.com/jcr/search-results"}
 journals_n |> 
