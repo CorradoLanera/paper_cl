@@ -1,0 +1,156 @@
+---
+title: "Elenco pubblicazioni"
+author: "Luca Vedoveli"
+date: "21/12/2021"
+output: html_document
+params:
+  me: "vedovelli"
+---
+
+<style>
+.main-container {
+    max-width: 940px;
+    margin-left: 0;
+    margin-right: auto;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  comment = "",
+  message = FALSE,
+  warning = FALSE
+)
+
+library(here)
+library(tidyverse)
+library(janitor)
+library(DT)
+```
+
+
+## Scopus
+
+CSV Export -> Select only Authors, 'Title, Year, Source title, Cited by, DOI, Link, Open Access' to export
+
+```{r, include = FALSE}
+scopus <- here("data-raw/scopus_lv.csv") |> 
+  read_csv() |> 
+  clean_names() |> 
+  rename(
+    journal = source_title,
+    n_cit = cited_by
+  ) |> 
+  mutate(
+    open = !is.na(open_access),
+    authors = str_split(authors, pattern = ", ") |> 
+      map(str_to_lower),
+    first = map_chr(authors, 1) |>
+      map_chr(str_to_title) |> 
+      as_factor(),
+    last = map_chr(authors, ~.x[[length(.x)]]) |>
+      str_to_title() |> 
+      as_factor(),
+    n_authors = map_int(authors, length),
+    my_pos = map_int(authors, str_which, params[["me"]]),
+    good_pos = (my_pos %in% 1:3) | (n_authors - my_pos < 2),
+    n_cit = replace_na(n_cit, 0L),
+    journal = str_to_title(journal)
+  ) |> 
+  select(year, journal, title, first, last, my_pos, good_pos, n_authors, n_cit, open, doi)
+```
+
+
+### Journals
+
+```{r, include = FALSE}
+journals_n <- scopus |> 
+  count(journal) |> 
+  arrange(desc(n))
+```
+
+```{r, include = FALSE, fig.cap="Source: https://jcr.clarivate.com/jcr/search-results<br>'Good position`: 1, 2, 3, -1, -2"}
+# journals_n$journal |> paste(collapse = ",\n") |> cat()
+journal_q <- tribble(
+  ~ journal,                                                             ~ quartile, ~where, ~impact_factor,
+    "International Journal Of Environmental Research And Public Health",   1,         "SSCI", 3.390,
+    "Bmc Public Health",                                                   2,         "SCIE", 3.295,
+    "International Journal Of Cardiology",                                 2,         "SCIE", 4.164,
+    "Journal Of Clinical Medicine",                                        1,         "SCIE", 4.241,
+    "Aging Clinical And Experimental Research",                            3,         "SCIE", 3.636,
+    "Amia ... Annual Symposium Proceedings. Amia Symposium",              NA,             NA,    NA,
+    "Applied Sciences (Switzerland)",                                      2,         "SCIE", 2.679,
+    "Bmj Open",                                                            2,         "SCIE", 2.692,
+    "Critical Care",                                                       1,         "SCIE", 9.097,
+    "Diagnostics",                                                         2,         "SCIE", 3.706,
+    "Epidemiology Biostatistics And Public Health",                       NA,             NA,    NA,
+    "Expert Review Of Medical Devices",                                    2,         "SCIE", 3.166,
+    "Health And Social Care In The Community",                             1,         "SSCI", 2.821,
+    "Ijc Heart And Vasculature",                                          NA,             NA,    NA,
+    "International Journal Of Food Sciences And Nutrition",                2,         "SCIE", 3.833,
+    "Jacc: Clinical Electrophysiology",                                    1,         "SCIE", 6.375,
+    "Jmir Medical Informatics",                                            3,         "SCIE", 2.955,
+    "Journal Of Cardiovascular Medicine",                                  3,         "SCIE", 2.160,
+    "Journal Of Clinical Epidemiology",                                    1,         "SCIE", 6.437,
+    "Journal Of Epidemiology And Community Health",                        1,         "SSCI", 3.710,
+    "Journal Of Multidisciplinary Healthcare",                             3,         "SCIE", 2.404,
+    "Journal Of Personalized Medicine",                                    1,         "SCIE", 4.945,
+    "Journal Of The American Heart Association",                           1,         "SCIE", 5.501,
+    "Journal Of The American Society Of Echocardiography",                 2,         "SCIE", 5.251,
+    "Medical Care Research And Review",                                    1,         "SSCI", 3.929,
+    "Nutrients",                                                           1,         "SCIE", 5.717,
+    "Scientific Reports",                                                  1,         "SCIE", 4.379,
+    "Systematic Reviews",                                                  2,         "SCIE", 2.522,
+    "The Lancet Planetary Health",                                         1,         "SCIE", 19.173,
+    "Children",                                                            2,         "SCIE", 2.863,
+    "Bioactive Materials",                                                 1,         "SCIE", 14.593,
+    "Neural Regeneration Research",                                        2,         "SCIE",  5.135,
+    "Pediatric Research",                                                  1,         "SCIE",  3.756,
+    "Mycoses",                                                             1,         "SCIE",  4.377,
+    "Biomolecules",                                                        2,         "SCIE",  4.879,
+    "Journal Of Pathology",                                                1,         "SCIE",  7.996,
+    "Journal Of Thoracic Disease",                                         3,         "SCIE",  2.895,
+    "Frontiers In Medicine",                                               1,         "SCIE",  5.093,
+    "Materials Science And Engineering C",                                 1,         "SCIE",  7.328,
+    "Frontiers In Oncology",                                               2,         "SCIE",  6.244,
+    "European Journal Of Pediatrics",                                      1,         "SCIE",  3.184,
+    "European Journal Of Cardio-Thoracic Surgery",                         2,         "SCIE",  4.191,
+    "European Journal Of Paediatric Neurology",                            3,         "SCIE",   3.14,
+    "Progress In Neurobiology",                                            1,         "SCIE", 11.685,
+    "American Journal Of Physiology - Lung Cellular And Molecular Physiology",2,      "SCIE",  4.249,
+    "Journal of Clinical Medicine",                                        1,         "SCIE",  4.242,
+    "Neurological Sciences",                                               3,         "SCIE",  3.307,
+    "Interactive Cardiovascular And Thoracic Surgery",                     3,         "SCIE",  1.905
+    
+
+)
+
+journal_q |> 
+  arrange(quartile) |> 
+  datatable(rownames = FALSE)
+```
+
+
+```{r, fig.cap="Source: https://www.scopus.com/authid/detail.uri?authorId=37056517000"}
+scopus_tbl <- scopus |> 
+  left_join(journal_q) |>
+  relocate(quartile, .after = journal) |>
+  arrange(desc(good_pos), quartile)
+
+scopus_tbl |> 
+  datatable(filter = "top",
+            rownames = FALSE,
+            options = list(pageLength = 15, autoWidth = TRUE))
+```
+
+Overall IF: `r sum(scopus_tbl[['impact_factor']], na.rm = TRUE)`.
+
+```{r, fig.cap="Source: https://jcr.clarivate.com/jcr/search-results"}
+journals_n |> 
+  left_join(journal_q) |> 
+  relocate(quartile, .after = journal) |>
+  arrange(quartile) |> 
+  datatable(rownames = FALSE)
+```
+
