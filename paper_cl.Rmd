@@ -100,7 +100,28 @@ journal_q <- tribble(
     "Nutrients",                                                           1,         "SCIE", 5.717,
     "Scientific Reports",                                                  1,         "SCIE", 4.379,
     "Systematic Reviews",                                                  2,         "SCIE", 2.522,
-    "The Lancet Planetary Health",                                         1,         "SCIE", 19.173
+    "The Lancet Planetary Health",                                         1,         "SCIE", 19.173,
+    "Children",                                                            2,         "SCIE", 2.863,
+    "Bioactive Materials",                                                 1,         "SCIE", 14.593,
+    "Neural Regeneration Research",                                        2,         "SCIE",  5.135,
+    "Pediatric Research",                                                  1,         "SCIE",  3.756,
+    "Mycoses",                                                             1,         "SCIE",  4.377,
+    "Biomolecules",                                                        2,         "SCIE",  4.879,
+    "Journal of Pathology",                                                1,         "SCIE",  7.996,
+    "Journal of Thoracic Disease",                                         3,         "SCIE",  2.895,
+    "Frontiers in Medicine",                                               1,         "SCIE",  5.093,
+    "Materials Science and Engineering C",                                 1,         "SCIE",  7.328,
+    "Frontiers in Oncology",                                               2,         "SCIE",  6.244,
+    "European Journal of Pediatrics",                                      1,         "SCIE",  3.184,
+    "European Journal of Cardio-thoracic Surgery",                         2,         "SCIE",  4.191,
+    "European Journal of Paediatric Neurology",                            3,         "SCIE",   3.14,
+    "Progress in Neurobiology",                                            1,         "SCIE", 11.685,
+    "American Journal of Physiology - Lung Cellular and Molecular Physiology",2,      "SCIE",  4.249,
+    "Journal of Clinical Medicine",                                        1,         "SCIE",  4.242,
+    "Neurological Sciences",                                               3,         "SCIE",  3.307,
+    "Interactive Cardiovascular and Thoracic Surgery",                     3,         "SCIE",  1.905
+    
+
 )
 
 journal_q |> 
