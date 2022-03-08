@@ -33,7 +33,7 @@ library(DT)
 ## Scopus
 
 ```{r, include = FALSE}
-scopus <- here("data-raw/scopus.csv") |> 
+scopus <- here("data-raw/scopus_cl.csv") |> 
   read_csv() |> 
   clean_names() |> 
   rename(
@@ -42,7 +42,7 @@ scopus <- here("data-raw/scopus.csv") |>
   ) |> 
   mutate(
     open = !is.na(open_access),
-    authors = str_split(authors, pattern = ", ") |> 
+    authors = str_split(authors, pattern = "\\., ") |> 
       map(str_to_lower),
     first = map_chr(authors, 1) |>
       map_chr(str_to_title) |> 
@@ -52,7 +52,7 @@ scopus <- here("data-raw/scopus.csv") |>
       as_factor(),
     n_authors = map_int(authors, length),
     my_pos = map_int(authors, str_which, params[["me"]]),
-    good_pos = (my_pos %in% 1:3) | (n_authors - my_pos < 2),
+    good_pos = (my_pos %in% 1:2) | (n_authors - my_pos < 2),
     n_cit = replace_na(n_cit, 0L),
     journal = str_to_title(journal)
   ) |> 
@@ -76,14 +76,15 @@ journal_q <- tribble(
     "Bmc Public Health",                                                   2,         "SCIE", 3.295,
     "International Journal Of Cardiology",                                 2,         "SCIE", 4.164,
     "Journal Of Clinical Medicine",                                        1,         "SCIE", 4.241,
-    "Aging Clinical And Experimental Research",                            3,         "SCIE", 3.636,
+    "Aging Clinical And Experimental Research",                            3,         "SCIE", 3.638,
     "Amia ... Annual Symposium Proceedings. Amia Symposium",              NA,             NA,    NA,
     "Applied Sciences (Switzerland)",                                      2,         "SCIE", 2.679,
+    "Bmc Medical Research Methodology",                                    1,         "SCIE", 4.615,
     "Bmj Open",                                                            2,         "SCIE", 2.692,
     "Critical Care",                                                       1,         "SCIE", 9.097,
     "Diagnostics",                                                         2,         "SCIE", 3.706,
     "Epidemiology Biostatistics And Public Health",                       NA,             NA,    NA,
-    "Expert Review Of Medical Devices",                                    2,         "SCIE", 3.166,
+    "Expert Review Of Medical Devices",                                    3,         "SCIE", 3.166,
     "Health And Social Care In The Community",                             1,         "SSCI", 2.821,
     "Ijc Heart And Vasculature",                                          NA,             NA,    NA,
     "International Journal Of Food Sciences And Nutrition",                2,         "SCIE", 3.833,
@@ -97,8 +98,8 @@ journal_q <- tribble(
     "Journal Of The American Heart Association",                           1,         "SCIE", 5.501,
     "Journal Of The American Society Of Echocardiography",                 2,         "SCIE", 5.251,
     "Medical Care Research And Review",                                    1,         "SSCI", 3.929,
-    "Nutrients",                                                           1,         "SCIE", 5.717,
-    "Scientific Reports",                                                  1,         "SCIE", 4.379,
+    "Nutrients",                                                           1,         "SCIE", 5.719,
+    "Scientific Reports",                                                  1,         "SCIE", 4.380,
     "Systematic Reviews",                                                  2,         "SCIE", 2.522,
     "The Lancet Planetary Health",                                         1,         "SCIE", 19.173,
     "Children",                                                            2,         "SCIE", 2.863,
@@ -112,13 +113,13 @@ journal_q <- tribble(
     "Frontiers in Medicine",                                               1,         "SCIE",  5.093,
     "Materials Science and Engineering C",                                 1,         "SCIE",  7.328,
     "Frontiers in Oncology",                                               2,         "SCIE",  6.244,
-    "European Journal of Pediatrics",                                      1,         "SCIE",  3.184,
-    "European Journal of Cardio-thoracic Surgery",                         2,         "SCIE",  4.191,
-    "European Journal of Paediatric Neurology",                            3,         "SCIE",   3.14,
+    "European Journal of Pediatrics",                                      1,         "SCIE",  3.183,
+    "European Journal of Cardio-thoracic Surgery",                         1,         "SCIE",  4.191,
+    "European Journal of Paediatric Neurology",                            1,         "SCIE",  3.40,
     "Progress in Neurobiology",                                            1,         "SCIE", 11.685,
-    "American Journal of Physiology - Lung Cellular and Molecular Physiology",2,      "SCIE",  4.249,
+    "American Journal of Physiology - Lung Cellular and Molecular Physiology",1,      "SCIE",  5.464,
     "Journal of Clinical Medicine",                                        1,         "SCIE",  4.242,
-    "Neurological Sciences",                                               3,         "SCIE",  3.307,
+    "Neurological Sciences",                                               2,         "SCIE",  3.307,
     "Interactive Cardiovascular and Thoracic Surgery",                     3,         "SCIE",  1.905
     
 
