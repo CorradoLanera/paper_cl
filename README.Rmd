@@ -32,3 +32,11 @@ and finally... push _knit_.
 __That's it!__
 
 Enjoy your metrics!
+
+
+## How to contribute
+You are very welcome to contribute by including/updating metrics to the journal list inside `report.Rmd` (approx from line 96) providing a pull request with your updated version of the script.
+
+## Code of Conduct
+
+Please note that the paper_cl project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
