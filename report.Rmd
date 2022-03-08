@@ -8,7 +8,7 @@ params:
   surname: "Lanera"
   data:
     label: "Scopus CSV:"
-    value: data-raw/scopus_cl.csv
+    value: data-raw/scopus.csv
     input: file
 ---
 
