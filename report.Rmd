@@ -14,7 +14,7 @@ params:
     value: "Lanera"
   data:
     label: "Scopus CSV:"
-    value: data-raw/scopus.csv
+    value: data-raw/scopus_cl.csv
     input: file
   top_good: 
     label: "Max relevant position from first:" 
@@ -108,6 +108,7 @@ journal_q <- tribble(
     "Bmj Open",                                                            2,         "SCIE", 2.692,
     "Critical Care",                                                       1,         "SCIE", 9.097,
     "Diagnostics",                                                         2,         "SCIE", 3.706,
+    "Digital Health",                                                      1,         "SCIE", 4.687,
     "Epidemiology Biostatistics And Public Health",                       NA,             NA,    NA,
     "Expert Review Of Medical Devices",                                    3,         "SCIE", 3.166,
     "Health And Social Care In The Community",                             1,         "SSCI", 2.821,
@@ -145,9 +146,10 @@ journal_q <- tribble(
     "American Journal of Physiology - Lung Cellular and Molecular Physiology",1,      "SCIE",  5.464,
     "Journal of Clinical Medicine",                                        1,         "SCIE",  4.242,
     "Neurological Sciences",                                               2,         "SCIE",  3.307,
-    "Interactive Cardiovascular and Thoracic Surgery",                     3,         "SCIE",  1.905
-    
-
+    "Frontiers In Public Health",                                          1,         "SCIE",  6.461,
+    "Interactive Cardiovascular and Thoracic Surgery",                     3,         "SCIE",  1.905,
+    "Computational And Mathematical Methods In Medicine",                  2,         "SCIE",  2.809,
+    "Healthcare (Switzerland)",                                            2,         "SCIE",  3.160
 )
 
 journal_q |> 
