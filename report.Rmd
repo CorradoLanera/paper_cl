@@ -20,7 +20,7 @@ params:
     label: "Max relevant position from first:" 
     value: 2
     input: slider
-    min: 0
+    min: 1
     max: 3
     step: 1
   bottom_good: 
@@ -28,7 +28,7 @@ params:
     value: -2
     input: slider
     min: -3
-    max: 0
+    max: -1
     step: 1
 ---
 
@@ -67,7 +67,7 @@ scopus <- params$data |>
   ) |> 
   mutate(
     open = !is.na(open_access),
-    authors = str_split(authors, pattern = "\\., ") |> 
+    authors = str_split(authors, pattern = "\\.; ") |> 
       map(str_to_lower),
     first = map_chr(authors, 1) |>
       map_chr(str_to_title) |> 
@@ -98,58 +98,59 @@ journals_n <- scopus |>
 journal_q <- tribble(
   ~ journal,                                                                 ~quartile, ~where, ~impact_factor,
     "International Journal Of Environmental Research And Public Health",       1,         "SSCI",  4.614,
-    "Bmc Public Health",                                                       2,         "SCIE",  4.135,
-    "International Journal Of Cardiology",                                     2,         "SCIE",  4.039,
-    "Journal Of Clinical Medicine",                                            2,         "SCIE",  4.964,
-    "Aging Clinical And Experimental Research",                                2,         "SCIE",  4.481,
+    "Bmc Public Health",                                                       1,         "SCIE",  3.500,
+    "International Journal Of Cardiology",                                     2,         "SCIE",  3.200,
+    "Journal Of Clinical Medicine",                                            1,         "SCIE",  3.000,
+    "Aging Clinical And Experimental Research",                                2,         "SCIE",  3.400,
     "Amia ... Annual Symposium Proceedings. Amia Symposium",                  NA,             NA,    NA,
-    "Applied Sciences (Switzerland)",                                          2,         "SCIE",  2.838,
-    "Bmc Medical Research Methodology",                                        1,         "SCIE",  4.614,
-    "Bmj Open",                                                                2,         "SCIE",  3.007,
-    "Critical Care",                                                           1,         "SCIE", 19.344,
-    "Diagnostics",                                                             2,         "SCIE",  3.992,
-    "Digital Health",                                                          1,         "SCIE",  4.687,
+    "Applied Sciences (Switzerland)",                                          1,         "SCIE",  2.500,
+    "Bmc Medical Research Methodology",                                        1,         "SCIE",  3.9,
+    "Bmj Open",                                                                1,         "SCIE",  2.4,
+    "Critical Care",                                                           1,         "SCIE",  8.8,
+    "Diagnostics",                                                             1,         "SCIE",  3.000,
+    "Digital Health",                                                          2,         "SCIE",  2.900,
     "Epidemiology Biostatistics And Public Health",                           NA,             NA,    NA,
-    "Expert Review Of Medical Devices",                                        3,         "SCIE",  3.439,
-    "Health And Social Care In The Community",                                 2,         "SSCI",  2.395,
-    "Ijc Heart And Vasculature",                                              NA,             NA,    NA,
-    "International Journal Of Food Sciences And Nutrition",                    2,         "SCIE",  4.444,
-    "Jacc: Clinical Electrophysiology",                                        2,         "SCIE",  6.124,
-    "Jmir Medical Informatics",                                                3,         "SCIE",  3.228,
-    "Journal Of Cardiovascular Medicine",                                      3,         "SCIE",  2.430,
-    "Journal Of Clinical Epidemiology",                                        1,         "SCIE",  7.407,
-    "Journal Of Epidemiology And Community Health",                            1,         "SSCI",  6.286,
-    "Journal Of Multidisciplinary Healthcare",                                 3,         "SCIE",  2.919,
-    "Journal Of Personalized Medicine",                                        2,         "SCIE",  3.508,
-    "Journal Of The American Heart Association",                               2,         "SCIE",  6.107,
-    "Journal Of The American Society Of Echocardiography",                     1,         "SCIE",  7.772,
-    "Medical Care Research And Review",                                        2,         "SSCI",  2.971,
-    "Nutrients",                                                               1,         "SCIE",  6.706,
-    "Scientific Reports",                                                      2,         "SCIE",  4.997,
-    "Systematic Reviews",                                                      2,         "SCIE",  3.136,
-    "The Lancet Planetary Health",                                             1,         "SCIE", 28.750,
-    "Children",                                                                2,         "SCIE",  2.835,
-    "Bioactive Materials",                                                     1,         "SCIE", 16.874,
-    "Neural Regeneration Research",                                            1,         "SCIE",  6.058,
-    "Pediatric Research",                                                      1,         "SCIE",  3.953,
-    "Mycoses",                                                                 1,         "SCIE",  4.931,
-    "Biomolecules",                                                            2,         "SCIE",  6.064,
-    "Journal of Pathology",                                                    1,         "SCIE",  9.883,
-    "Journal of Thoracic Disease",                                             3,         "SCIE",  3.005,
-    "Frontiers in Medicine",                                                   2,         "SCIE",  5.058,
+    "Expert Review Of Medical Devices",                                        3,         "SCIE",  2.900,
+    "Health And Social Care In The Community",                                 1,         "SSCI",  2.000,
+    "Ijc Heart And Vasculature",                                               2,             NA,  2.500,
+    "International Journal Of Food Sciences And Nutrition",                    2,         "SCIE",  3.500,
+    "Jacc: Clinical Electrophysiology",                                        1,         "SCIE",  8.000,
+    "Jmir Medical Informatics",                                                2,         "SCIE",  3.200,
+    "Journal Of Cardiovascular Medicine",                                      2,         "SCIE",  2.900,
+    "Journal Of Clinical Epidemiology",                                        1,         "SCIE",  7.300,
+    "Journal Of Epidemiology And Community Health",                            1,         "SSCI",  4.900,
+    "Journal Of Multidisciplinary Healthcare",                                 2,         "SCIE",  2.700,
+    "Journal Of Personalized Medicine",                                        1,         "SCIE",  3.000,
+    "Journal Of The American Heart Association",                               1,         "SCIE",  5.000,
+    "Journal Of The American Society Of Echocardiography",                     1,         "SCIE",  5.400,
+    "Medical Care Research And Review",                                        2,         "SSCI",  2.400,
+    "Nutrients",                                                               1,         "SCIE",  4.800,
+    "Scientific Reports",                                                      1,         "SCIE",  3.800,
+    "Systematic Reviews",                                                      1,         "SCIE",  6.300,
+    "The Lancet Planetary Health",                                             1,         "SCIE", 24.200,
+    "Children",                                                                2,         "SCIE",  2.000,
+    "Bioactive Materials",                                                     1,         "SCIE", 18.000,
+    "Neural Regeneration Research",                                            1,         "SCIE",  5.900,
+    "Pediatric Research",                                                      1,         "SCIE",  3.100,
+    "Mycoses",                                                                 1,         "SCIE",  4.100,
+    "Biomolecules",                                                            1,         "SCIE",  4.800,
+    "Journal of Pathology",                                                    1,         "SCIE",  5.600,
+    "Journal of Thoracic Disease",                                             3,         "SCIE",  2.100,
+    "Frontiers in Medicine",                                                   1,         "SCIE",  3.100,
     "Materials Science and Engineering C",                                     2,         "SCIE",  1.842,
-    "Frontiers in Oncology",                                                   2,         "SCIE",  5.738,
-    "European Journal of Pediatrics",                                          1,         "SCIE",  3.860,
-    "European Journal of Cardio-thoracic Surgery",                             1,         "SCIE",  4.534,
-    "European Journal of Paediatric Neurology",                                2,         "SCIE",  3.692,
-    "Progress in Neurobiology",                                                1,         "SCIE", 10.885,
-    "American Journal of Physiology - Lung Cellular and Molecular Physiology", 1,         "SCIE",  6.011,
-    "Journal of Clinical Medicine",                                            2,         "SCIE",  4.964,
-    "Neurological Sciences",                                                   2,         "SCIE",  3.830,
-    "Frontiers In Public Health",                                              1,         "SCIE",  6.461,
-    "Interactive Cardiovascular and Thoracic Surgery",                         3,         "SCIE",  1.978,
+    "Frontiers in Oncology",                                                   2,         "SCIE",  3.500,
+    "European Journal of Pediatrics",                                          1,         "SCIE",  3.000,
+    "European Journal of Cardio-thoracic Surgery",                             1,         "SCIE",  3.300,
+    "European Journal of Paediatric Neurology",                                2,         "SCIE",  2.300,
+    "Progress in Neurobiology",                                                1,         "SCIE",  6.700,
+    "American Journal of Physiology - Lung Cellular and Molecular Physiology", 1,         "SCIE",  3.700,
+    "Journal of Clinical Medicine",                                            1,         "SCIE",  3.000,
+    "Neurological Sciences",                                                   2,         "SCIE",  2.700,
+    "Frontiers In Public Health",                                              2,         "SCIE",  3.000,
+    "Interactive Cardiovascular and Thoracic Surgery",                         2,         "SCIE",  1.600,
     "Computational And Mathematical Methods In Medicine",                      2,         "SCIE",  2.809,
-    "Healthcare (Switzerland)",                                                2,         "SCIE",  3.160
+    "Healthcare (Switzerland)",                                                2,         "SCIE",  3.160,
+    "Plos One",                                                                1,         "SCIE",  2.900,
 )
 
 journal_q |> 
