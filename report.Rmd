@@ -25,7 +25,7 @@ params:
     step: 1
   bottom_good: 
     label: "Max relevant position from the last (-1 is the last only, -2 is up to the second to the last, ...):" 
-    value: -2
+    value: -1
     input: slider
     min: -3
     max: -1
@@ -77,11 +77,12 @@ scopus <- params$data |>
       as_factor(),
     n_authors = map_int(authors, length),
     my_pos = map_int(authors, str_which, str_to_lower(params[["surname"]])),
-    good_pos = (my_pos %in% seq_len(params$top_good)) | (n_authors - my_pos < params$bottom_good),
+    good_pos = (my_pos %in% seq_len(params$top_good)) |
+      (n_authors - my_pos < params$bottom_good),
     n_cit = replace_na(n_cit, 0L),
     journal = str_to_title(journal)
   ) |> 
-  select(year, journal, title, first, last, my_pos, good_pos, n_authors, n_cit, open, doi)
+  select(year, journal, title, authors, first, last, my_pos, good_pos, n_authors, n_cit, open, doi)
 ```
 
 
@@ -97,7 +98,7 @@ journals_n <- scopus |>
 # journals_n$journal |> paste(collapse = ",\n") |> cat()
 journal_q <- tribble(
   ~ journal,                                                                 ~quartile, ~where, ~impact_factor,
-    "International Journal Of Environmental Research And Public Health",       1,         "SSCI",  4.614,
+    "International Journal Of Environmental Research And Public Health",       NA,         NA,  NA,
     "Bmc Public Health",                                                       1,         "SCIE",  3.500,
     "International Journal Of Cardiology",                                     2,         "SCIE",  3.200,
     "Journal Of Clinical Medicine",                                            1,         "SCIE",  3.000,
@@ -151,6 +152,9 @@ journal_q <- tribble(
     "Computational And Mathematical Methods In Medicine",                      2,         "SCIE",  2.809,
     "Healthcare (Switzerland)",                                                2,         "SCIE",  3.160,
     "Plos One",                                                                1,         "SCIE",  2.900,
+    "Journal Of Medical Systems",                                              1,         "SCIE",  3.5,
+    "Jmir Public Health And Surveillance",                                     1,         "SCIE",  3.5,
+    "Epidemiologia E Prevenzione",                                            NA,             NA,   NA
 )
 
 journal_q |> 
@@ -177,7 +181,7 @@ Overall IF: `r sum(scopus_tbl[['impact_factor']], na.rm = TRUE)`.
 journals_n |> 
   left_join(journal_q) |> 
   relocate(quartile, .after = journal) |>
-  arrange(quartile) |> 
+  arrange(quartile, desc(impact_factor)) |> 
   datatable(rownames = FALSE)
 ```
 
