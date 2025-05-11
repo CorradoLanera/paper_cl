@@ -154,7 +154,9 @@ journal_q <- tribble(
     "Plos One",                                                                1,         "SCIE",  2.900,
     "Journal Of Medical Systems",                                              1,         "SCIE",  3.5,
     "Jmir Public Health And Surveillance",                                     1,         "SCIE",  3.5,
-    "Epidemiologia E Prevenzione",                                            NA,             NA,   NA
+    "Epidemiologia E Prevenzione",                                            NA,             NA,   NA,
+    "Informatics",                                                             2,         "SCIE",  3.4,
+    "Scientific Data",                                                         1,         "SCIE",  5.8
 )
 
 journal_q |> 
